@@ -5,6 +5,18 @@
  *      Author: Arne Wischer
  */
 #include "Controller.h"
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <stdio.h>
+
+#include "ClientList.h"
+#include "Client.h"
+#include "Game.h"
+
+#include "config.h"
 
 int main(){
 	int sock,err,realport,clientsock;
@@ -13,9 +25,9 @@ int main(){
     client_list spielerliste;
     pthread_t game;
     sem_t gamewait;
+    sem_init(&gamewait,0,0);
 
     struct game_args game_arguments;
-    struct client_args client_arguments;
 
     clientlist_init(&spielerliste);
     sock = socket(PF_INET, SOCK_STREAM, 0);
@@ -55,19 +67,17 @@ int main(){
 
     for(;;){
     	clientsock = accept(sock,NULL,0);
-    	if(clientsock != -1){
+    	if(clientsock == -1){
     		perror("accept() fehlgeschlagen");
-    		return 4;
+    	}else{
+    		if(spielerliste.count >= NUMPLAYER){
+    			newclient = clientlist_add(&spielerliste,clientsock,&gamewait);
+				pthread_create(&(newclient->thread), NULL, client_run, &newclient);
+    		}else{
+				write(clientsock,"Too many connections",20);
+				close (clientsock);
+			}
     	}
-    	if(spielerliste.count >= NUMPLAYER){
-			newclient = clientlist_add(&spielerliste,clientsock);
-			client_arguments.game_wait = &gamewait;
-			client_arguments.client = newclient;
-			pthread_create(&(newclient->thread), NULL, client_run, &client_arguments);
-		}else{
-			write(clientsock,"Too many connections",20);
-			close (clientsock);
-		}
     }
 
 

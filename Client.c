@@ -12,4 +12,17 @@ void* client_run(void* args){
 	arg = *(struct client_args*) args;
 	client_entry* client = arg.client;
 	int socket = client->socket;
+	//make handshaking
+	//Grosse Schleife:
+	//pollend recv()
+	//wenn button == e dann exit
+	//wenn button == s dann
+	//Mutex
+	//TODO: Hier nacharbeiten
+	//	wenn button == s
+	//	wenn s dann Game_Semaphore++
+	//Endmutex
+	//recv()
+	//wenn button == e dann exit
+	//wenn button == leertaste
 }

@@ -8,8 +8,6 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include <semaphore.h>
-#include "ClientList.h"
 
 struct game_args {
 	client_list* spielerliste;

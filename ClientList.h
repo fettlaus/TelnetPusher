@@ -7,9 +7,7 @@
 
 #ifndef CLIENTLIST_H_
 #define CLIENTLIST_H_
-
-#include <stdlib.h>
-#include <stdio.h>
+#include <pthread.h>
 #include <semaphore.h>
 
 typedef struct client_entry{
@@ -17,9 +15,10 @@ typedef struct client_entry{
 	int socket;
 	pthread_t thread;
 	sem_t *sem;
-	unsigned playable: 1;
-	unsigned ingame: 1;
-	unsigned exited: 1;
+	sem_t* game_wait;
+	unsigned playable: 1; //ready to play
+	unsigned ingame: 1; // now playing
+	unsigned exited: 1; //player quit, to be deleted
 	char *name;
 	unsigned int starttime;
 	unsigned int timed;
@@ -31,7 +30,7 @@ typedef struct client_list{
 } client_list;
 
 void clientlist_init(client_list*);
-client_entry* clientlist_add(client_list*,int);
+client_entry* clientlist_add(client_list*,int,sem_t*);
 int clientlist_remove(client_list*, int);
 int clientlist_convert_fd();
 //char* clientlist_get_name(int *socket);

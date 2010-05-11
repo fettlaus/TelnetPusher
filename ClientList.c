@@ -6,12 +6,17 @@
  */
 #include "ClientList.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <semaphore.h>
+#include <pthread.h>
+
 void clientlist_init(client_list *list){
 	list->count = 0;
 	list->head = NULL;
 }
 
-client_entry* clientlist_add(client_list *list, int socket){
+client_entry* clientlist_add(client_list *list, int socket, sem_t* gamewait){
 	client_entry * new;
 	new = malloc(sizeof(client_entry));
 	if(!new)
@@ -21,6 +26,7 @@ client_entry* clientlist_add(client_list *list, int socket){
 	new->ingame = 0;
 	new->exited = 0;
 	new->playable = 0;
+	new->game_wait = gamewait;
 	list->head = new;
 	list->count++;
 	return new;
