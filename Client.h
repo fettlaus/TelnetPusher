@@ -12,8 +12,8 @@
 #include "ClientList.h"
 
 struct client_args {
-	sem_t* game_wait;
 	client_entry* client;
+	client_list* spielerliste;
 };
 
 void* client_run(void* args);

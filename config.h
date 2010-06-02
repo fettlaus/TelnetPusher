@@ -12,10 +12,12 @@
 #define MAXPORT 5020
 
 #define NUMPLAYER 10 //int
-#define STARTCHAR s //char
+#define STARTCHAR 's' //char
 
-#define RANDOMLOWER 3 //sec
-#define RANDOMUPPER 10 //sec
-#define TIMEOUT 7 //sec
+#define RANDOM_LOWER 3 //sec
+#define RANDOM_UPPER 10 //sec
+#define GAME_TIMEOUT 7 //sec
+
+#define DEBUG
 
 #endif /* CONFIG_H_ */

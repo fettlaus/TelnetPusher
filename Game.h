@@ -11,8 +11,7 @@
 
 struct game_args {
 	client_list* spielerliste;
-	sem_t* game_wait;
-	char* startchar;
+	char startchar;
 };
 
 void* game_run(void* args);
