@@ -11,6 +11,5 @@
 #include "ClientList.h"
 
 int main();
-void send_all(client_list* spielerliste, char* string, int length);
 
 #endif /* CONTROLLER_H_ */

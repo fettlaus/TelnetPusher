@@ -12,17 +12,20 @@ void* client_run(void* args){
 	arg = *(struct client_args*) args;
 	client_entry* client = arg.client;
 	int socket = client->socket;
-	//make handshaking
-	//Grosse Schleife:
-	//pollend recv()
-	//wenn button == e dann exit
-	//wenn button == s dann
-	//Mutex
-	//TODO: Hier nacharbeiten
-	//	wenn button == s
-	//	wenn s dann Game_Semaphore++
-	//Endmutex
-	//recv()
-	//wenn button == e dann exit
-	//wenn button == leertaste
+	char buf[3];
+	char welcome[] = WELCOMEMSG;
+	char announcemsg[sizeof(ANNOUNCEMSG)+sizeof(client->name)];
+
+	send(socket,welcome,sizeof(welcome),MSG_NOSIGNAL);
+	read(socket, &client->name, sizeof(client->name));
+
+	sprintf(buf,"%c%c%c",IAC,WILL,ECHO);
+	send(socket,buf,sizeof(buf),MSG_NOSIGNAL);
+	sprintf(buf,"%c%c%c",IAC,WILL,SUPPRESSGOAHEAD);
+	send(socket,buf,sizeof(buf),MSG_NOSIGNAL);
+
+	snprintf(announcemsg,sizeof(announcemsg),"%s%s",ANNOUNCEMSG,client->name);
+	send_all(client->clist,ANNOUNCEMSG,sizeof(ANNOUNCEMSG)+sizeof(client->name),socket);
+	client->playable = 1;
+	return 0;
 }

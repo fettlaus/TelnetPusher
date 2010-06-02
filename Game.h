@@ -15,5 +15,5 @@ struct game_args {
 };
 
 void* game_run(void* args);
-
+void send_all(client_list* clist,char* msg, int size, int sender);
 #endif /* GAME_H_ */

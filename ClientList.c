@@ -26,6 +26,7 @@ client_entry* clientlist_add(client_list *list, int socket){
 	new->ingame = 0;
 	new->exited = 0;
 	new->playable = 0;
+	new->clist = list;
 	list->head = new;
 	list->count++;
 	return new;

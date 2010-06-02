@@ -8,12 +8,16 @@
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
-#include <semaphore.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include "Telnet.h"
 #include "ClientList.h"
+#include "config.h"
+#include "Game.h"
 
 struct client_args {
 	client_entry* client;
-	client_list* spielerliste;
 };
 
 void* client_run(void* args);

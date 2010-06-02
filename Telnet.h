@@ -16,6 +16,7 @@
 #define DONT 0xFE
 
 #define ECHO 0x01
+#define SUPPRESSGOAHEAD 0x03
 
 
 #endif /* TELNET_H_ */

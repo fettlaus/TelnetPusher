@@ -25,9 +25,6 @@ int main(){
     client_entry *newclient;
     client_list spielerliste;
     pthread_t game;
-    sem_t gamewait;
-    sem_init(&gamewait,0,0);
-    spielerliste.game_wait = &gamewait;
 
     struct game_args game_arguments;
 
@@ -73,6 +70,9 @@ int main(){
 
     for(;;){
     	clientsock = accept(sock,NULL,0);
+    	 int option = 1;
+    	 setsockopt( clientsock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option) );
+    	 setsockopt( sock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option) );
 #ifdef DEBUG
     	inet_ntop(AF_INET,&(address.sin_addr),i_adr,INET_ADDRSTRLEN);
     	printf("New inbound connection from %s\n",i_adr);
@@ -80,7 +80,7 @@ int main(){
     	if(clientsock == -1){
     		perror("accept() fehlgeschlagen");
     	}else{
-    		if(spielerliste.count >= NUMPLAYER){
+    		if(spielerliste.count <= NUMPLAYER){
 #ifdef DEBUG
     			printf(" New Player on IP %s\n",i_adr);
 #endif
@@ -97,9 +97,4 @@ int main(){
 		return 0;
 }
 
-void send_all(client_list* spielerliste, char* string,int length){
-	client_entry* m;
-	for (m = spielerliste->head; m; m = m->next){
-		write(m->socket, string, length);
-	}
-}
+
